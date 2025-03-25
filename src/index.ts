@@ -1,8 +1,18 @@
-import { initializeServer, startServer } from "./server"
+import { initializeServer, startServer } from "./server";
 
-process.on('unhandledRejection', (err) => {
-    console.error(err)
-    process.exit(1)
-})
+// Manejo de errores no capturados
+process.on("unhandledRejection", (err) => {
+  console.error(err);
+  process.exit(1);
+});
 
-await startServer()
+// Función asíncrona autoinvocada para iniciar el servidor
+(async () => {
+  try {
+    await startServer();
+    console.log("Server started successfully");
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+})();
