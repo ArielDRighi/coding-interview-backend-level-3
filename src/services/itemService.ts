@@ -29,10 +29,23 @@ export class ItemService {
   }
 
   async updateItem(id: number, data: ItemInput): Promise<Item | null> {
-    return prisma.item.update({
-      where: { id },
-      data,
-    });
+    try {
+      const item = await prisma.item.findUnique({
+        where: { id },
+      });
+
+      if (!item) {
+        return null;
+      }
+
+      return await prisma.item.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      console.error("Error in updateItem:", error);
+      throw error;
+    }
   }
 
   async deleteItem(id: number): Promise<void> {
